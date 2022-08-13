@@ -1,0 +1,29 @@
+{
+  "name": "v3-dragger",
+  "version": "1.0.0",
+  "description": "A vue toolset that let's you make any element draggable, on both mobile and desktop with just 3 lines of code!",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc -p .",
+    "prepublishOnly": "npm test && npm run build"
+  },
+  "keywords": [
+    "vue",
+    "drag",
+    "mobile",
+    "desktop",
+    "touch"
+  ],
+  "author": "Chris Sellek",
+  "license": "MIT",
+  "dependencies": {
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.6",
+    "jest": "^28.1.3",
+    "ts-jest": "^28.0.7"
+  }
+}
