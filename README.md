@@ -22,7 +22,8 @@ There are two ways you can use v3-dragger. The far easier and quicker way is as 
 
 If you're planning on using the provided directive (recommended!), you'll need to register it globally in your Vue project.
 
-```ts main.ts
+```ts
+// main.ts
 import { createApp } from 'vue';
 import { vDraggerBeforeMount, vDraggerUnMount } from 'v3-dragger';
 
@@ -34,13 +35,15 @@ createApp(App)
   .mount('#app');
 ```
 
-```vue Draggable.vue
+```vue
+<!-- Draggable.vue -->
 <div class="draggable-element" v-dragger>This is a draggable element</div>
 ```
 
 If you do this, CSS variables by the names of `--v-dragger-y-offset` and `--v-dragger-x-offset` will automatically be added to the element. All you have to do at this point is set the proper positions of your element using those CSS variables. Here's an example:
 
 ```css
+/* Draggable.vue */
 .draggable-element {
   position: relative;
   top: var(--v-dragger-y-offset);
@@ -56,7 +59,8 @@ If you need to add extra functionality to your drag start, move, or end function
 
 When you add your directive to an element, you can pass in any one of three functions that will fire when your drag/touch event starts, when your element is moved, and when your drag/touch event ends:
 
-```html Draggable.vue
+```html
+<!-- Draggable.vue -->
 <template>
   <div
     class="draggable-element"
@@ -103,7 +107,8 @@ You'll notice the hook isn't returning a `dragEnd`. This is because the logic th
 
 So you've fired the hook function and you're grabbing the necessary variables off of it to allow your user to drag your element. What next? First, you'll need to utilize CSS variables in order to set the position of your element as the user drags. In your script tag, create a computed property that returns a CSS variable as a string.
 
-```ts Draggable.vue
+```ts
+// Draggable.vue
 const dragYOffsetCss = computed(
   () => `--drag-y-offset: ${touchYOffset.value}px`
 );
@@ -111,7 +116,8 @@ const dragYOffsetCss = computed(
 
 In your template, you'll have to add the computed property as the element's style and make sure you register your events!
 
-```html Draggable.vue
+```html
+<!-- Draggable.vue -->
 <div
   class="draggable-element"
   :style="dragYOffsetCss"
@@ -125,7 +131,8 @@ In your template, you'll have to add the computed property as the element's styl
 
 You now have access to this value in your CSS and can use it to change an element's position as you see fit!
 
-```css Draggable.vue
+```css
+/* Draggable.vue */
 top: var(--drag-y-offset);
 left: var(--drag-x-offset);
 ```
