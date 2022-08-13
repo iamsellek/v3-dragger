@@ -9,6 +9,11 @@
     "build": "tsc -p .",
     "prepublishOnly": "npm test && npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamsellek/v3-dragger"
+  },
+  "homepage": "https://github.com/iamsellek/v3-dragger#readme",
   "keywords": [
     "vue",
     "drag",
