@@ -40,14 +40,14 @@ createApp(App)
 <div class="draggable-element" v-dragger>This is a draggable element</div>
 ```
 
-If you do this, CSS variables by the names of `--v-dragger-y-offset` and `--v-dragger-x-offset` will automatically be added to the element. All you have to do at this point is set the proper positions of your element using those CSS variables. Here's an example:
+If you do this, _unitless_ CSS variables by the names of `--v-dragger-y-offset` and `--v-dragger-x-offset` will automatically be added to the element. All you have to do at this point is set the proper positions of your element using those CSS variables. Don't forget to convert the unitless variable to the proper unit by calling the `calc` function and multiplying the variable by the proper unit! Here's an example:
 
 ```css
 /* Draggable.vue */
 .draggable-element {
   position: relative;
-  top: var(--v-dragger-y-offset);
-  left: var(--v-dragger-x-offset);
+  top: calc(var(--v-dragger-y-offset) * 1px);
+  left: calc(var(--v-dragger-x-offset) * 1px);
 }
 ```
 
@@ -99,7 +99,7 @@ These are the current offsets of the cursor from the starting position. They are
 
 #### dragStart, dragMove, resetState
 
-These three are event functions. `dragStart` and `dragEnd` obviously fire at the appropriate times. `resetState` allows you to manually reset all of the state variables (above) back to 0 in one function call.
+These three are event functions. `dragStart` and `dragMove` obviously fire at the appropriate times. `resetState` allows you to manually reset all of the state variables (above) back to 0 in one function call.
 
 You'll notice the hook isn't returning a `dragEnd`. This is because the logic that should fire on a drag's end is going to be entirely dependent on the use case. If you don't need to do anything special on a drag's end, you don't have to worry about anything at all at this point!
 
@@ -114,13 +114,14 @@ const dragYOffsetCss = computed(
 );
 ```
 
-In your template, you'll have to add the computed property as the element's style and make sure you register your events!
+In your template, you'll have to add the computed property as the element's style, make sure you register your events, and add a dragger="true" attribute (yes, you need the `="true"`, don't forget it)!
 
 ```html
 <!-- Draggable.vue -->
 <div
   class="draggable-element"
   :style="dragYOffsetCss"
+  draggable="true"
   @dragstart="dragStart"
   @drag="dragMove"
   @dragmove="dragMove"

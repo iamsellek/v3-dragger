@@ -3,6 +3,18 @@ import { Ref, ref, watch, DirectiveBinding } from 'vue';
 const isTouchEvent = (e: TouchEvent | DragEvent): e is TouchEvent =>
   !!(e as TouchEvent).touches;
 
+const beforeEventHandler = (e: TouchEvent | DragEvent) => {
+  if (isTouchEvent(e)) {
+    return;
+  }
+
+  // get rid of the ghost image of the component
+  const img = new Image();
+  img.src =
+    'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+  e.dataTransfer?.setDragImage(img, 0, 0);
+};
+
 const dragStartGeneric = (
   dragYStart: Ref<number>,
   dragXStart: Ref<number>,
@@ -70,7 +82,6 @@ export const vDraggerBeforeMount = (
     binding.value?.dragEnd?.(e, dragYOffset, dragXOffset);
   });
   el.addEventListener('dragend', (e) => {
-    console.log('v-dragger bruh');
     binding.value?.dragEnd?.(e, dragYOffset, dragXOffset);
   });
 
@@ -78,9 +89,13 @@ export const vDraggerBeforeMount = (
   el.setAttribute('draggable', 'true');
   el.style.setProperty('cursor', 'grab');
 
+  // initial set
+  el.style.setProperty('--v-dragger-y-offset', `${-dragYOffset.value}`);
+  el.style.setProperty('--v-dragger-x-offset', `${-dragXOffset.value}`);
+
   watch([dragYOffset, dragXOffset], () => {
-    el.style.setProperty('--v-dragger-y-offset', `${-dragYOffset.value}px`);
-    el.style.setProperty('--v-dragger-x-offset', `${-dragXOffset.value}px`);
+    el.style.setProperty('--v-dragger-y-offset', `${-dragYOffset.value}`);
+    el.style.setProperty('--v-dragger-x-offset', `${-dragXOffset.value}`);
   });
 };
 
@@ -104,6 +119,8 @@ export const useDragger = () => {
   const dragXOffset = ref(0);
 
   const dragStart = (e: TouchEvent | DragEvent) => {
+    beforeEventHandler(e);
+
     isTouchEvent(e)
       ? dragStartGeneric(
           dragYStart,
@@ -115,6 +132,8 @@ export const useDragger = () => {
   };
 
   const dragMove = (e: TouchEvent | DragEvent) => {
+    beforeEventHandler(e);
+
     isTouchEvent(e)
       ? dragMoveGeneric(
           dragYOffset,
