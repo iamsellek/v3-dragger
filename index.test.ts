@@ -1,9 +1,10 @@
 // no need to create the entire dummy event for a test
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDesktopDragger, useDragger, useMobileDragger } from ".";
+import { useDesktopDragger, useDragger, useMobileDragger } from '.';
+import { vDraggerBeforeMount, vDraggerUnMount } from './index';
 
-describe("useMobileDragger", () => {
-  it("sets initial values correctly", () => {
+describe('useMobileDragger', () => {
+  it('sets initial values correctly', () => {
     const { touchYStart, touchXStart, touchYOffset, touchXOffset } =
       useMobileDragger();
 
@@ -13,7 +14,7 @@ describe("useMobileDragger", () => {
     expect(touchXOffset.value).toBe(0);
   });
 
-  it("handles a touchStart event correctly", () => {
+  it('handles a touchStart event correctly', () => {
     const { touchYStart, touchXStart, touchStart } = useMobileDragger();
 
     touchStart({ touches: [{ clientY: 1, clientX: 2 }] } as any);
@@ -22,7 +23,7 @@ describe("useMobileDragger", () => {
     expect(touchXStart.value).toBe(2);
   });
 
-  it("handles a touchMove event correctly", () => {
+  it('handles a touchMove event correctly', () => {
     const { touchYOffset, touchXOffset, touchMove } = useMobileDragger();
 
     touchMove({ touches: [{ clientY: 1, clientX: 2 }] } as any);
@@ -31,7 +32,7 @@ describe("useMobileDragger", () => {
     expect(touchXOffset.value).toBe(-2);
   });
 
-  it("resets the state correctly", () => {
+  it('resets the state correctly', () => {
     const {
       touchYStart,
       touchXStart,
@@ -54,8 +55,8 @@ describe("useMobileDragger", () => {
   });
 });
 
-describe("useDesktopDragger", () => {
-  it("sets initial values correctly", () => {
+describe('useDesktopDragger', () => {
+  it('sets initial values correctly', () => {
     const { dragYStart, dragXStart, dragYOffset, dragXOffset } =
       useDesktopDragger();
 
@@ -65,7 +66,7 @@ describe("useDesktopDragger", () => {
     expect(dragXOffset.value).toBe(0);
   });
 
-  it("handles a dragStart event correctly", () => {
+  it('handles a dragStart event correctly', () => {
     const { dragYStart, dragXStart, dragStart } = useDesktopDragger();
 
     dragStart({ clientY: 1, clientX: 2 } as any);
@@ -74,7 +75,7 @@ describe("useDesktopDragger", () => {
     expect(dragXStart.value).toBe(2);
   });
 
-  it("handles a dragMove event correctly", () => {
+  it('handles a dragMove event correctly', () => {
     const { dragYOffset, dragXOffset, dragMove } = useDesktopDragger();
 
     dragMove({ clientY: 1, clientX: 2 } as any);
@@ -83,7 +84,7 @@ describe("useDesktopDragger", () => {
     expect(dragXOffset.value).toBe(-2);
   });
 
-  it("resets the state correctly", () => {
+  it('resets the state correctly', () => {
     const {
       dragYStart,
       dragXStart,
@@ -106,8 +107,8 @@ describe("useDesktopDragger", () => {
   });
 });
 
-describe("useDragger", () => {
-  it("sets initial values correctly", () => {
+describe('useDragger', () => {
+  it('sets initial values correctly', () => {
     const { dragYStart, dragXStart, dragYOffset, dragXOffset } = useDragger();
 
     expect(dragYStart.value).toBe(0);
@@ -116,7 +117,7 @@ describe("useDragger", () => {
     expect(dragXOffset.value).toBe(0);
   });
 
-  it("handles a dragStart (desktop) event correctly", () => {
+  it('handles a dragStart (desktop) event correctly', () => {
     const { dragYStart, dragXStart, dragStart } = useDragger();
 
     dragStart({ clientY: 1, clientX: 2 } as any);
@@ -125,7 +126,7 @@ describe("useDragger", () => {
     expect(dragXStart.value).toBe(2);
   });
 
-  it("handles a dragMove (desktop) event correctly", () => {
+  it('handles a dragMove (desktop) event correctly', () => {
     const { dragYOffset, dragXOffset, dragMove } = useDragger();
 
     dragMove({ clientY: 1, clientX: 2 } as any);
@@ -134,7 +135,7 @@ describe("useDragger", () => {
     expect(dragXOffset.value).toBe(-2);
   });
 
-  it("resets the state correctly (desktop)", () => {
+  it('resets the state correctly (desktop)', () => {
     const {
       dragYStart,
       dragXStart,
@@ -156,25 +157,25 @@ describe("useDragger", () => {
     expect(dragXOffset.value).toBe(0);
   });
 
-  it("handles a touchStart event correctly", () => {
-    const { touchYStart, touchXStart, touchStart } = useMobileDragger();
+  it('handles a dragStart (mobile) event correctly', () => {
+    const { dragYStart, dragXStart, dragStart } = useDragger();
 
-    touchStart({ touches: [{ clientY: 1, clientX: 2 }] } as any);
+    dragStart({ touches: [{ clientY: 1, clientX: 2 }] } as any);
 
-    expect(touchYStart.value).toBe(1);
-    expect(touchXStart.value).toBe(2);
+    expect(dragYStart.value).toBe(1);
+    expect(dragXStart.value).toBe(2);
   });
 
-  it("handles a touchMove event correctly", () => {
-    const { touchYOffset, touchXOffset, touchMove } = useMobileDragger();
+  it('handles a dragMove (mobile) event correctly', () => {
+    const { dragYOffset, dragXOffset, dragMove } = useDragger();
 
-    touchMove({ touches: [{ clientY: 1, clientX: 2 }] } as any);
+    dragMove({ touches: [{ clientY: 1, clientX: 2 }] } as any);
 
-    expect(touchYOffset.value).toBe(-1);
-    expect(touchXOffset.value).toBe(-2);
+    expect(dragYOffset.value).toBe(-1);
+    expect(dragXOffset.value).toBe(-2);
   });
 
-  it("resets the state correctly", () => {
+  it('resets the state correctly', () => {
     const {
       touchYStart,
       touchXStart,
@@ -194,5 +195,84 @@ describe("useDragger", () => {
     expect(touchXStart.value).toBe(0);
     expect(touchYOffset.value).toBe(0);
     expect(touchXOffset.value).toBe(0);
+  });
+});
+
+describe('vDraggerBeforeMount', () => {
+  const addEventListener = jest.fn();
+  const setAttribute = jest.fn();
+  const setProperty = jest.fn();
+
+  test('sets all the proper event listeners and sets attributes/styles correctly', () => {
+    vDraggerBeforeMount(
+      { addEventListener, setAttribute, style: { setProperty } } as any,
+      {} as any
+    );
+
+    // event listeners
+    expect(addEventListener).toHaveBeenCalledTimes(6);
+    expect(addEventListener).toHaveBeenCalledWith(
+      'touchstart',
+      expect.any(Function)
+    );
+    expect(addEventListener).toHaveBeenCalledWith(
+      'dragstart',
+      expect.any(Function)
+    );
+    expect(addEventListener).toHaveBeenCalledWith(
+      'touchmove',
+      expect.any(Function)
+    );
+    expect(addEventListener).toHaveBeenCalledWith('drag', expect.any(Function));
+    expect(addEventListener).toHaveBeenCalledWith(
+      'touchend',
+      expect.any(Function)
+    );
+    expect(addEventListener).toHaveBeenCalledWith(
+      'dragend',
+      expect.any(Function)
+    );
+
+    // attributes/styles
+    expect(setAttribute).toHaveBeenCalledTimes(1);
+    expect(setAttribute).toHaveBeenCalledWith('draggable', 'true');
+    expect(setProperty).toHaveBeenCalledTimes(3);
+    expect(setProperty).toHaveBeenCalledWith('cursor', 'grab');
+    expect(setProperty).toHaveBeenCalledWith('--v-dragger-y-offset', '0');
+    expect(setProperty).toHaveBeenCalledWith('--v-dragger-x-offset', '0');
+  });
+});
+
+describe('vDraggerUnMount', () => {
+  const removeEventListener = jest.fn();
+
+  it('removes all event listeners', () => {
+    vDraggerUnMount({ removeEventListener } as any);
+
+    expect(removeEventListener).toHaveBeenCalledTimes(6);
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'touchstart',
+      expect.any(Function)
+    );
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'dragstart',
+      expect.any(Function)
+    );
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'touchmove',
+      expect.any(Function)
+    );
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'drag',
+      expect.any(Function)
+    );
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'touchend',
+      expect.any(Function)
+    );
+    expect(removeEventListener).toHaveBeenCalledWith(
+      'dragend',
+      expect.any(Function)
+    );
   });
 });

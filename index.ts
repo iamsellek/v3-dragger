@@ -106,8 +106,8 @@ export const vDraggerUnMount = (el: HTMLElement) => {
   el.removeEventListener('dragstart', (e) => {});
   el.removeEventListener('touchmove', (e) => {});
   el.removeEventListener('drag', (e) => {});
-  el.addEventListener('touchend', (e) => {});
-  el.addEventListener('dragend', (e) => {});
+  el.removeEventListener('touchend', (e) => {});
+  el.removeEventListener('dragend', (e) => {});
   /* eslint-enable @typescript-eslint/no-unused-vars */
   /* eslint-enable @typescript-eslint/no-empty-function */
 };
@@ -222,10 +222,14 @@ export const useDesktopDragger = () => {
   const dragXOffset = ref(0);
 
   const dragStart = (e: DragEvent) => {
+    beforeEventHandler(e);
+
     dragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
   };
 
   const dragMove = (e: DragEvent) => {
+    beforeEventHandler(e);
+
     dragMoveGeneric(
       dragYOffset,
       dragYStart.value,
