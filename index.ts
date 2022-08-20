@@ -16,22 +16,42 @@ const beforeEventHandler = (e: TouchEvent | DragEvent) => {
 };
 
 const dragStartGeneric = (
+  e: TouchEvent | DragEvent,
+  dragYOffset: Ref<number>,
   dragYStart: Ref<number>,
+  dragXOffset: Ref<number>,
   dragXStart: Ref<number>,
   clientY: number,
-  clientX: number
+  clientX: number,
+  customDragStart?: CustomGeneric
 ) => {
-  dragYStart.value = clientY;
-  dragXStart.value = clientX;
+  if (customDragStart) {
+    customDragStart(
+      e,
+      dragYOffset,
+      dragYStart,
+      dragXOffset,
+      dragXStart,
+      clientY,
+      clientX
+    );
+
+    return;
+  } else {
+    dragYStart.value = clientY;
+    dragXStart.value = clientX;
+  }
 };
 
 const dragMoveGeneric = (
+  e: TouchEvent | DragEvent,
   dragYOffset: Ref<number>,
-  dragYStart: number,
+  dragYStart: Ref<number>,
   dragXOffset: Ref<number>,
-  dragXStart: number,
+  dragXStart: Ref<number>,
   clientY: number,
-  clientX: number
+  clientX: number,
+  customDragMove?: CustomGeneric
 ) => {
   /**
    * When letting go of the mouse button, clientY and clientX both become
@@ -40,19 +60,46 @@ const dragMoveGeneric = (
   if (clientY === 0 && clientX === 0) {
     return;
   } else {
-    dragYOffset.value = dragYStart - clientY;
-    dragXOffset.value = dragXStart - clientX;
+    if (customDragMove) {
+      customDragMove(
+        e,
+        dragYOffset,
+        dragYStart,
+        dragXOffset,
+        dragXStart,
+        clientY,
+        clientX
+      );
+
+      return;
+    } else {
+      dragYOffset.value = dragYStart.value - clientY;
+      dragXOffset.value = dragXStart.value - clientX;
+    }
   }
 };
 
 const dragEndGeneric = (
+  e: TouchEvent | DragEvent,
   dragYOffset: Ref<number>,
-  dragYStart: number,
+  dragYStart: Ref<number>,
   dragXOffset: Ref<number>,
-  dragXStart: number,
+  dragXStart: Ref<number>,
   clientY: number,
-  clientX: number
+  clientX: number,
+  customDragEnd?: CustomGeneric
 ) => {
+  if (customDragEnd) {
+    customDragEnd(
+      e,
+      dragYOffset,
+      dragYStart,
+      dragXOffset,
+      dragXStart,
+      clientY,
+      clientX
+    );
+  }
   /**
    * By default, we don't do anything on end. This function
    * is declared here to get it's types down.
@@ -134,10 +181,20 @@ export const vDraggerUnMount = (el: HTMLElement) => {
   /* eslint-enable @typescript-eslint/no-empty-function */
 };
 
+type CustomGeneric = (
+  e: TouchEvent | DragEvent,
+  dragYOffset: Ref<number>,
+  dragYStart: Ref<number>,
+  dragXOffset: Ref<number>,
+  dragXStart: Ref<number>,
+  clientY: number,
+  clientX: number
+) => void;
+
 export const useDragger = (
-  finalDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
-  finalDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
-  finalDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+  customDragEndGeneric?: CustomGeneric,
+  customDragMoveGeneric?: CustomGeneric,
+  customDragStartGeneric?: CustomGeneric
 ) => {
   const dragYStart = ref(0);
   const dragYOffset = ref(0);
@@ -148,54 +205,75 @@ export const useDragger = (
     beforeEventHandler(e);
 
     isTouchEvent(e)
-      ? finalDragStartGeneric(
+      ? dragStartGeneric(
+          e,
+          dragYOffset,
           dragYStart,
+          dragXOffset,
           dragXStart,
           e.touches[0].clientY,
-          e.touches[0].clientX
+          e.touches[0].clientX,
+          customDragStartGeneric
         )
-      : finalDragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
+      : dragStartGeneric(
+          e,
+          dragYOffset,
+          dragYStart,
+          dragXOffset,
+          dragXStart,
+          e.clientY,
+          e.clientX,
+          customDragStartGeneric
+        );
   };
 
   const dragMove = (e: TouchEvent | DragEvent) => {
     beforeEventHandler(e);
 
     isTouchEvent(e)
-      ? finalDragMoveGeneric(
+      ? dragMoveGeneric(
+          e,
           dragYOffset,
-          dragYStart.value,
+          dragYStart,
           dragXOffset,
-          dragXStart.value,
+          dragXStart,
           e.touches[0].clientY,
-          e.touches[0].clientX
+          e.touches[0].clientX,
+          customDragMoveGeneric
         )
-      : finalDragMoveGeneric(
+      : dragMoveGeneric(
+          e,
           dragYOffset,
-          dragYStart.value,
+          dragYStart,
           dragXOffset,
-          dragXStart.value,
+          dragXStart,
           e.clientY,
-          e.clientX
+          e.clientX,
+          customDragMoveGeneric
         );
   };
 
   const dragEnd = (e: TouchEvent | DragEvent) => {
     isTouchEvent(e)
-      ? finalDragEndGeneric(
+      ? dragEndGeneric(
+          e,
           dragYOffset,
-          dragYStart.value,
+          dragYStart,
           dragXOffset,
-          dragXStart.value,
+          dragXStart,
           e.touches[0].clientY,
-          e.touches[0].clientX
+          e.touches[0].clientX,
+          customDragEndGeneric
         )
-      : finalDragEndGeneric(
+      : dragEndGeneric(
+          e,
           dragYOffset,
-          dragYStart.value,
+          dragYStart,
           dragXOffset,
-          dragXStart.value,
+          dragXStart,
           e.clientY,
-          e.clientX
+          e.clientX,
+          customDragEndGeneric
         );
   };
 
@@ -219,9 +297,9 @@ export const useDragger = (
 };
 
 export const useMobileDragger = (
-  finalDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
-  finalDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
-  finalDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+  customDragEndGeneric?: CustomGeneric,
+  customDragMoveGeneric?: CustomGeneric,
+  customDragStartGeneric?: CustomGeneric
 ) => {
   const touchYStart = ref(0);
   const touchYOffset = ref(0);
@@ -229,33 +307,41 @@ export const useMobileDragger = (
   const touchXOffset = ref(0);
 
   const touchStart = (e: TouchEvent) => {
-    finalDragStartGeneric(
+    dragStartGeneric(
+      e,
+      touchYOffset,
       touchYStart,
+      touchXOffset,
       touchXStart,
       e.touches[0].clientY,
-      e.touches[0].clientX
+      e.touches[0].clientX,
+      customDragStartGeneric
     );
   };
 
   const touchMove = (e: TouchEvent) => {
-    finalDragMoveGeneric(
+    dragMoveGeneric(
+      e,
       touchYOffset,
-      touchYStart.value,
+      touchYStart,
       touchXOffset,
-      touchXStart.value,
+      touchXStart,
       e.touches[0].clientY,
-      e.touches[0].clientX
+      e.touches[0].clientX,
+      customDragMoveGeneric
     );
   };
 
   const touchEnd = (e: TouchEvent) => {
-    finalDragEndGeneric(
+    dragEndGeneric(
+      e,
       touchYOffset,
-      touchYStart.value,
+      touchYStart,
       touchXOffset,
-      touchXStart.value,
+      touchXStart,
       e.touches[0].clientY,
-      e.touches[0].clientX
+      e.touches[0].clientX,
+      customDragEndGeneric
     );
   };
 
@@ -279,9 +365,9 @@ export const useMobileDragger = (
 };
 
 export const useDesktopDragger = (
-  finalDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
-  finalDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
-  finalDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+  customDragEndGeneric?: CustomGeneric,
+  customDragMoveGeneric?: CustomGeneric,
+  customDragStartGeneric?: CustomGeneric
 ) => {
   const dragYStart = ref(0);
   const dragYOffset = ref(0);
@@ -291,30 +377,43 @@ export const useDesktopDragger = (
   const dragStart = (e: DragEvent) => {
     beforeEventHandler(e);
 
-    finalDragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
+    dragStartGeneric(
+      e,
+      dragYOffset,
+      dragYStart,
+      dragXOffset,
+      dragXStart,
+      e.clientY,
+      e.clientX,
+      customDragStartGeneric
+    );
   };
 
   const dragMove = (e: DragEvent) => {
     beforeEventHandler(e);
 
-    finalDragMoveGeneric(
+    dragMoveGeneric(
+      e,
       dragYOffset,
-      dragYStart.value,
+      dragYStart,
       dragXOffset,
-      dragXStart.value,
+      dragXStart,
       e.clientY,
-      e.clientX
+      e.clientX,
+      customDragMoveGeneric
     );
   };
 
   const dragEnd = (e: DragEvent) => {
-    finalDragEndGeneric(
+    dragEndGeneric(
+      e,
       dragYOffset,
-      dragYStart.value,
+      dragYStart,
       dragXOffset,
-      dragXStart.value,
+      dragXStart,
       e.clientY,
-      e.clientX
+      e.clientX,
+      customDragEndGeneric
     );
   };
 
