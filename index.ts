@@ -135,9 +135,9 @@ export const vDraggerUnMount = (el: HTMLElement) => {
 };
 
 export const useDragger = (
-  userDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
-  userDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
-  userDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+  finalDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
+  finalDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
+  finalDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
 ) => {
   const dragYStart = ref(0);
   const dragYOffset = ref(0);
@@ -148,20 +148,20 @@ export const useDragger = (
     beforeEventHandler(e);
 
     isTouchEvent(e)
-      ? dragStartGeneric(
+      ? finalDragStartGeneric(
           dragYStart,
           dragXStart,
           e.touches[0].clientY,
           e.touches[0].clientX
         )
-      : dragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
+      : finalDragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
   };
 
   const dragMove = (e: TouchEvent | DragEvent) => {
     beforeEventHandler(e);
 
     isTouchEvent(e)
-      ? dragMoveGeneric(
+      ? finalDragMoveGeneric(
           dragYOffset,
           dragYStart.value,
           dragXOffset,
@@ -169,7 +169,7 @@ export const useDragger = (
           e.touches[0].clientY,
           e.touches[0].clientX
         )
-      : dragMoveGeneric(
+      : finalDragMoveGeneric(
           dragYOffset,
           dragYStart.value,
           dragXOffset,
@@ -181,7 +181,7 @@ export const useDragger = (
 
   const dragEnd = (e: TouchEvent | DragEvent) => {
     isTouchEvent(e)
-      ? dragEndGeneric(
+      ? finalDragEndGeneric(
           dragYOffset,
           dragYStart.value,
           dragXOffset,
@@ -189,7 +189,7 @@ export const useDragger = (
           e.touches[0].clientY,
           e.touches[0].clientX
         )
-      : dragEndGeneric(
+      : finalDragEndGeneric(
           dragYOffset,
           dragYStart.value,
           dragXOffset,
@@ -219,9 +219,9 @@ export const useDragger = (
 };
 
 export const useMobileDragger = (
-  userDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
-  userDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
-  userDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+  finalDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
+  finalDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
+  finalDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
 ) => {
   const touchYStart = ref(0);
   const touchYOffset = ref(0);
@@ -229,7 +229,7 @@ export const useMobileDragger = (
   const touchXOffset = ref(0);
 
   const touchStart = (e: TouchEvent) => {
-    dragStartGeneric(
+    finalDragStartGeneric(
       touchYStart,
       touchXStart,
       e.touches[0].clientY,
@@ -238,7 +238,7 @@ export const useMobileDragger = (
   };
 
   const touchMove = (e: TouchEvent) => {
-    dragMoveGeneric(
+    finalDragMoveGeneric(
       touchYOffset,
       touchYStart.value,
       touchXOffset,
@@ -249,7 +249,7 @@ export const useMobileDragger = (
   };
 
   const touchEnd = (e: TouchEvent) => {
-    dragEndGeneric(
+    finalDragEndGeneric(
       touchYOffset,
       touchYStart.value,
       touchXOffset,
@@ -279,9 +279,9 @@ export const useMobileDragger = (
 };
 
 export const useDesktopDragger = (
-  userDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
-  userDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
-  userDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+  finalDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
+  finalDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
+  finalDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
 ) => {
   const dragYStart = ref(0);
   const dragYOffset = ref(0);
@@ -291,13 +291,13 @@ export const useDesktopDragger = (
   const dragStart = (e: DragEvent) => {
     beforeEventHandler(e);
 
-    dragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
+    finalDragStartGeneric(dragYStart, dragXStart, e.clientY, e.clientX);
   };
 
   const dragMove = (e: DragEvent) => {
     beforeEventHandler(e);
 
-    dragMoveGeneric(
+    finalDragMoveGeneric(
       dragYOffset,
       dragYStart.value,
       dragXOffset,
@@ -308,7 +308,7 @@ export const useDesktopDragger = (
   };
 
   const dragEnd = (e: DragEvent) => {
-    dragEndGeneric(
+    finalDragEndGeneric(
       dragYOffset,
       dragYStart.value,
       dragXOffset,

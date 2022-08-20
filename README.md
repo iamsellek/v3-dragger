@@ -101,7 +101,34 @@ These are the current offsets of the cursor from the starting position. They are
 
 These four are event functions. `dragStart` and `dragMove` obviously fire at the appropriate times. `dragEnd` actually does not do anything by default, since what you'll want to do on your dragEnd is either nothing or something specific to your situation. `resetState` allows you to manually reset all of the state variables (above) back to 0 in one function call.
 
-`dragStart`, `dragMove`, and `dragEnd` are able to be overriden individually if you so prefer. To do so, pass in your overrides when calling one of the `use` hook functions. All of them have the parameters in the same order, and that order is in reverse (`dragEnd`, `dragMove`, `dragStart`), since `dragEnd` is probably going to be overriden most often, followed by `dragMove`. Pass undefined for anything you want to use the defaults for. Pass 0 parameters if you want to use all of the defaults.
+`dragStart`, `dragMove`, and `dragEnd` are able to be overriden individually if you so prefer. To do so, pass in your overrides when calling one of the `use` hook functions. All of them have the parameters in the same order, and that order is in reverse (`dragEnd`, `dragMove`, `dragStart`), since `dragEnd` is probably going to be overriden most often, followed by `dragMove`. Pass undefined for anything you want to use the defaults for. Pass 0 parameters if you want to use all of the defaults. For those without TS, a) start using it (teehee) and b) see the types for the functions below:
+
+```ts
+dragStartOverride: (
+  dragYStart: Ref<number>,
+  dragXStart: Ref<number>,
+  clientY: number,
+  clientX: number
+) => void;
+
+dragMoveGeneric: (
+  dragYOffset: Ref<number>,
+  dragYStart: number,
+  dragXOffset: Ref<number>,
+  dragXStart: number,
+  clientY: number,
+  clientX: number
+) => void;
+
+dragEndGeneric: (
+  dragYOffset: Ref<number>,
+  dragYStart: number,
+  dragXOffset: Ref<number>,
+  dragXStart: number,
+  clientY: number,
+  clientX: number
+) => void;
+```
 
 ### Using hook functions in conjunction with CSS variables
 
