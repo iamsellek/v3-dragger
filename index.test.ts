@@ -62,6 +62,15 @@ describe('useMobileDragger', () => {
     expect(touchXOffset.value).toBe(10);
   });
 
+  it('handles a touchEnd event correctly (ie does nothing)', () => {
+    const { touchYOffset, touchXOffset, touchEnd } = useMobileDragger();
+
+    touchEnd({ touches: [{ clientY: 1, clientX: 2 }] } as any);
+
+    expect(touchYOffset.value).toBe(0);
+    expect(touchXOffset.value).toBe(0);
+  });
+
   it('resets the state correctly', () => {
     const {
       touchYStart,
@@ -142,6 +151,15 @@ describe('useDesktopDragger', () => {
 
     expect(dragYOffset.value).toBe(8);
     expect(dragXOffset.value).toBe(10);
+  });
+
+  it('handles a dragEnd event correctly (ie does nothing)', () => {
+    const { dragYOffset, dragXOffset, dragEnd } = useDesktopDragger();
+
+    dragEnd({ touches: [{ clientY: 1, clientX: 2 }] } as any);
+
+    expect(dragYOffset.value).toBe(0);
+    expect(dragXOffset.value).toBe(0);
   });
 
   it('resets the state correctly', () => {
@@ -225,6 +243,15 @@ describe('useDragger', () => {
     expect(dragXOffset.value).toBe(10);
   });
 
+  it('handles a dragEnd event correctly (ie does nothing) (desktop)', () => {
+    const { dragYOffset, dragXOffset, dragEnd } = useDesktopDragger();
+
+    dragEnd({ touches: [{ clientY: 1, clientX: 2 }] } as any);
+
+    expect(dragYOffset.value).toBe(0);
+    expect(dragXOffset.value).toBe(0);
+  });
+
   it('resets the state correctly (desktop)', () => {
     const {
       dragYStart,
@@ -293,6 +320,15 @@ describe('useDragger', () => {
 
     expect(touchYOffset.value).toBe(8);
     expect(touchXOffset.value).toBe(10);
+  });
+
+  it('handles a touchEnd event correctly (ie does nothing) (mobile)', () => {
+    const { touchYOffset, touchXOffset, touchEnd } = useMobileDragger();
+
+    touchEnd({ touches: [{ clientY: 1, clientX: 2 }] } as any);
+
+    expect(touchYOffset.value).toBe(0);
+    expect(touchXOffset.value).toBe(0);
   });
 
   it('resets the state correctly', () => {

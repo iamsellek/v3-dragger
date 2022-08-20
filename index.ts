@@ -45,6 +45,20 @@ const dragMoveGeneric = (
   }
 };
 
+const dragEndGeneric = (
+  dragYOffset: Ref<number>,
+  dragYStart: number,
+  dragXOffset: Ref<number>,
+  dragXStart: number,
+  clientY: number,
+  clientX: number
+) => {
+  /**
+   * By default, we don't do anything on end. This function
+   * is declared here to get it's types down.
+   */
+};
+
 interface VDraggerFunctions {
   dragStart?: (
     e: TouchEvent | DragEvent,
@@ -120,7 +134,11 @@ export const vDraggerUnMount = (el: HTMLElement) => {
   /* eslint-enable @typescript-eslint/no-empty-function */
 };
 
-export const useDragger = () => {
+export const useDragger = (
+  userDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
+  userDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
+  userDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+) => {
   const dragYStart = ref(0);
   const dragYOffset = ref(0);
   const dragXStart = ref(0);
@@ -161,7 +179,25 @@ export const useDragger = () => {
         );
   };
 
-  const dragEnd = () => {};
+  const dragEnd = (e: TouchEvent | DragEvent) => {
+    isTouchEvent(e)
+      ? dragEndGeneric(
+          dragYOffset,
+          dragYStart.value,
+          dragXOffset,
+          dragXStart.value,
+          e.touches[0].clientY,
+          e.touches[0].clientX
+        )
+      : dragEndGeneric(
+          dragYOffset,
+          dragYStart.value,
+          dragXOffset,
+          dragXStart.value,
+          e.clientY,
+          e.clientX
+        );
+  };
 
   const resetState = () => {
     dragYStart.value = 0;
@@ -182,7 +218,11 @@ export const useDragger = () => {
   };
 };
 
-export const useMobileDragger = () => {
+export const useMobileDragger = (
+  userDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
+  userDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
+  userDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+) => {
   const touchYStart = ref(0);
   const touchYOffset = ref(0);
   const touchXStart = ref(0);
@@ -208,7 +248,16 @@ export const useMobileDragger = () => {
     );
   };
 
-  const touchEnd = () => {};
+  const touchEnd = (e: TouchEvent) => {
+    dragEndGeneric(
+      touchYOffset,
+      touchYStart.value,
+      touchXOffset,
+      touchXStart.value,
+      e.touches[0].clientY,
+      e.touches[0].clientX
+    );
+  };
 
   const resetState = () => {
     touchYStart.value = 0;
@@ -229,7 +278,11 @@ export const useMobileDragger = () => {
   };
 };
 
-export const useDesktopDragger = () => {
+export const useDesktopDragger = (
+  userDragEndGeneric: typeof dragEndGeneric = dragEndGeneric,
+  userDragMoveGeneric: typeof dragMoveGeneric = dragMoveGeneric,
+  userDragStartGeneric: typeof dragStartGeneric = dragStartGeneric
+) => {
   const dragYStart = ref(0);
   const dragYOffset = ref(0);
   const dragXStart = ref(0);
@@ -254,7 +307,16 @@ export const useDesktopDragger = () => {
     );
   };
 
-  const dragEnd = () => {};
+  const dragEnd = (e: DragEvent) => {
+    dragEndGeneric(
+      dragYOffset,
+      dragYStart.value,
+      dragXOffset,
+      dragXStart.value,
+      e.clientY,
+      e.clientX
+    );
+  };
 
   const resetState = () => {
     dragYStart.value = 0;

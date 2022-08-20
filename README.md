@@ -97,11 +97,11 @@ These are the starting positions of the cursor when the user started the drag/to
 
 These are the current offsets of the cursor from the starting position. They are set to 0 until the user starts dragging. These are the important variables for you. You'll use these to set the CSS position of your element using CSS variables.
 
-#### dragStart, dragMove, resetState
+#### dragStart, dragMove, dragEnd, resetState
 
-These three are event functions. `dragStart` and `dragMove` obviously fire at the appropriate times. `resetState` allows you to manually reset all of the state variables (above) back to 0 in one function call.
+These four are event functions. `dragStart` and `dragMove` obviously fire at the appropriate times. `dragEnd` actually does not do anything by default, since what you'll want to do on your dragEnd is either nothing or something specific to your situation. `resetState` allows you to manually reset all of the state variables (above) back to 0 in one function call.
 
-You'll notice the hook isn't returning a `dragEnd`. This is because the logic that should fire on a drag's end is going to be entirely dependent on the use case. If you don't need to do anything special on a drag's end, you don't have to worry about anything at all at this point!
+`dragStart`, `dragMove`, and `dragEnd` are able to be overriden individually if you so prefer. To do so, pass in your overrides when calling one of the `use` hook functions. All of them have the parameters in the same order, and that order is in reverse (`dragEnd`, `dragMove`, `dragStart`), since `dragEnd` is probably going to be overriden most often, followed by `dragMove`. Pass undefined for anything you want to use the defaults for. Pass 0 parameters if you want to use all of the defaults.
 
 ### Using hook functions in conjunction with CSS variables
 
