@@ -33,8 +33,16 @@ const dragMoveGeneric = (
   clientY: number,
   clientX: number
 ) => {
-  dragYOffset.value = dragYStart - clientY;
-  dragXOffset.value = dragXStart - clientX;
+  /**
+   * When letting go of the mouse button, clientY and clientX both become
+   * 0 for some reason, at least in chromium-based browsers.
+   */
+  if (clientY === 0 && clientX === 0) {
+    return;
+  } else {
+    dragYOffset.value = dragYStart - clientY;
+    dragXOffset.value = dragXStart - clientX;
+  }
 };
 
 interface VDraggerFunctions {
@@ -153,6 +161,8 @@ export const useDragger = () => {
         );
   };
 
+  const dragEnd = () => {};
+
   const resetState = () => {
     dragYStart.value = 0;
     dragYOffset.value = 0;
@@ -167,6 +177,7 @@ export const useDragger = () => {
     dragXOffset,
     dragStart,
     dragMove,
+    dragEnd,
     resetState,
   };
 };
@@ -197,6 +208,8 @@ export const useMobileDragger = () => {
     );
   };
 
+  const touchEnd = () => {};
+
   const resetState = () => {
     touchYStart.value = 0;
     touchYOffset.value = 0;
@@ -211,6 +224,7 @@ export const useMobileDragger = () => {
     touchXOffset,
     touchStart,
     touchMove,
+    touchEnd,
     resetState,
   };
 };
@@ -240,6 +254,8 @@ export const useDesktopDragger = () => {
     );
   };
 
+  const dragEnd = () => {};
+
   const resetState = () => {
     dragYStart.value = 0;
     dragYOffset.value = 0;
@@ -254,6 +270,7 @@ export const useDesktopDragger = () => {
     dragXOffset,
     dragStart,
     dragMove,
+    dragEnd,
     resetState,
   };
 };

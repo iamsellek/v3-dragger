@@ -32,6 +32,36 @@ describe('useMobileDragger', () => {
     expect(touchXOffset.value).toBe(-2);
   });
 
+  it('does nothing when clientY and clientX are both 0', () => {
+    const { touchYOffset, touchXOffset, touchYStart, touchXStart, touchMove } =
+      useMobileDragger();
+
+    touchYStart.value = 10;
+    touchXStart.value = 10;
+    touchYOffset.value = 1;
+    touchXOffset.value = 2;
+
+    touchMove({ touches: [{ clientY: 0, clientX: 0 }] } as any);
+
+    expect(touchYOffset.value).toBe(1);
+    expect(touchXOffset.value).toBe(2);
+  });
+
+  it('does move logic when only x OR y is 0', () => {
+    const { touchYOffset, touchXOffset, touchYStart, touchXStart, touchMove } =
+      useMobileDragger();
+
+    touchYStart.value = 10;
+    touchXStart.value = 10;
+    touchYOffset.value = -10;
+    touchXOffset.value = 2;
+
+    touchMove({ touches: [{ clientY: 2, clientX: 0 }] } as any);
+
+    expect(touchYOffset.value).toBe(8);
+    expect(touchXOffset.value).toBe(10);
+  });
+
   it('resets the state correctly', () => {
     const {
       touchYStart,
@@ -82,6 +112,36 @@ describe('useDesktopDragger', () => {
 
     expect(dragYOffset.value).toBe(-1);
     expect(dragXOffset.value).toBe(-2);
+  });
+
+  it('does nothing when clientY and clientX are both 0', () => {
+    const { dragYOffset, dragXOffset, dragYStart, dragXStart, dragMove } =
+      useDesktopDragger();
+
+    dragYStart.value = 10;
+    dragXStart.value = 10;
+    dragYOffset.value = 1;
+    dragXOffset.value = 2;
+
+    dragMove({ clientY: 0, clientX: 0 } as any);
+
+    expect(dragYOffset.value).toBe(1);
+    expect(dragXOffset.value).toBe(2);
+  });
+
+  it('does move logic when only x OR y is 0', () => {
+    const { dragYOffset, dragXOffset, dragYStart, dragXStart, dragMove } =
+      useDesktopDragger();
+
+    dragYStart.value = 10;
+    dragXStart.value = 10;
+    dragYOffset.value = -10;
+    dragXOffset.value = 2;
+
+    dragMove({ clientY: 2, clientX: 0 } as any);
+
+    expect(dragYOffset.value).toBe(8);
+    expect(dragXOffset.value).toBe(10);
   });
 
   it('resets the state correctly', () => {
@@ -135,6 +195,36 @@ describe('useDragger', () => {
     expect(dragXOffset.value).toBe(-2);
   });
 
+  it('does nothing when clientY and clientX are both 0 (desktop)', () => {
+    const { dragYOffset, dragXOffset, dragYStart, dragXStart, dragMove } =
+      useDesktopDragger();
+
+    dragYStart.value = 10;
+    dragXStart.value = 10;
+    dragYOffset.value = 1;
+    dragXOffset.value = 2;
+
+    dragMove({ clientY: 0, clientX: 0 } as any);
+
+    expect(dragYOffset.value).toBe(1);
+    expect(dragXOffset.value).toBe(2);
+  });
+
+  it('does move logic when only x OR y is 0 (desktop)', () => {
+    const { dragYOffset, dragXOffset, dragYStart, dragXStart, dragMove } =
+      useDesktopDragger();
+
+    dragYStart.value = 10;
+    dragXStart.value = 10;
+    dragYOffset.value = -10;
+    dragXOffset.value = 2;
+
+    dragMove({ clientY: 2, clientX: 0 } as any);
+
+    expect(dragYOffset.value).toBe(8);
+    expect(dragXOffset.value).toBe(10);
+  });
+
   it('resets the state correctly (desktop)', () => {
     const {
       dragYStart,
@@ -173,6 +263,36 @@ describe('useDragger', () => {
 
     expect(dragYOffset.value).toBe(-1);
     expect(dragXOffset.value).toBe(-2);
+  });
+
+  it('does nothing when clientY and clientX are both 0 (mobile)', () => {
+    const { touchYOffset, touchXOffset, touchYStart, touchXStart, touchMove } =
+      useMobileDragger();
+
+    touchYStart.value = 10;
+    touchXStart.value = 10;
+    touchYOffset.value = 1;
+    touchXOffset.value = 2;
+
+    touchMove({ touches: [{ clientY: 0, clientX: 0 }] } as any);
+
+    expect(touchYOffset.value).toBe(1);
+    expect(touchXOffset.value).toBe(2);
+  });
+
+  it('does move logic when only x OR y is 0 (mobile)', () => {
+    const { touchYOffset, touchXOffset, touchYStart, touchXStart, touchMove } =
+      useMobileDragger();
+
+    touchYStart.value = 10;
+    touchXStart.value = 10;
+    touchYOffset.value = -10;
+    touchXOffset.value = 2;
+
+    touchMove({ touches: [{ clientY: 2, clientX: 0 }] } as any);
+
+    expect(touchYOffset.value).toBe(8);
+    expect(touchXOffset.value).toBe(10);
   });
 
   it('resets the state correctly', () => {
