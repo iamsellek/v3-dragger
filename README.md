@@ -115,6 +115,8 @@ type CustomGeneric = (
 ) => void;
 ```
 
+Keep in mind that, as the type above shows, the event is either going to be a `TouchEvent` or a `DragEvent`. The exported function `isTouchEvent` is will help you determine which it is. Don't forget to write logic for both if you want your dragging to work on desktop and mobile!
+
 ### Using hook functions in conjunction with CSS variables
 
 So you've fired the hook function and you're grabbing the necessary variables off of it to allow your user to drag your element. What next? First, you'll need to utilize CSS variables in order to set the position of your element as the user drags. In your script tag, create a computed property that returns a CSS variable as a string.

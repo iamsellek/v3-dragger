@@ -1,6 +1,6 @@
 import { Ref, ref, watch, DirectiveBinding } from 'vue';
 
-const isTouchEvent = (e: TouchEvent | DragEvent): e is TouchEvent =>
+export const isTouchEvent = (e: TouchEvent | DragEvent): e is TouchEvent =>
   !!(e as TouchEvent).touches;
 
 const beforeEventHandler = (e: TouchEvent | DragEvent) => {
