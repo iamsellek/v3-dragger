@@ -1,9 +1,12 @@
 module.exports = {
   preset: 'ts-jest',
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
+  transform: {
+    '^.+\\.ts?$': [
+      'ts-jest',
+      {
+        tsConfig: 'tsconfig.json',
+      },
+    ],
   },
   clearMocks: true,
   testMatch: ['<rootDir>/**/*.test.ts'],
