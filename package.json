@@ -1,6 +1,6 @@
 {
   "name": "v3-dragger",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "description": "A vue toolset that let's you make any element draggable, on both mobile and desktop with just 3 lines of code!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
