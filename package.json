@@ -27,11 +27,11 @@
   "author": "Chris Sellek",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.1.5",
-    "typescript": "^5.4.5",
-    "vue": "^3.4.29"
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.2",
+    "vue": "^3.5.6"
   }
 }
